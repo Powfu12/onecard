@@ -57,33 +57,14 @@ function initializeNavigation() {
     });
 }
 
-// ==================== CARD FLIP ANIMATION ====================
+// ==================== CARD SPIN ANIMATION ====================
 /**
- * Initialize 3D card flip functionality
+ * Initialize 3D card spin functionality
+ * Card automatically spins continuously
  */
 function initializeCardFlip() {
-    const flipBtn = document.getElementById('flipCard');
-    const cardContainer = document.getElementById('cardContainer');
-    const cardFront = document.getElementById('cardFront');
-    const cardBack = document.getElementById('cardBack');
-    let isFlipped = false;
-
-    flipBtn.addEventListener('click', function() {
-        isFlipped = !isFlipped;
-        
-        if (isFlipped) {
-            cardFront.style.transform = 'rotateY(180deg)';
-            cardBack.style.transform = 'rotateY(0deg)';
-        } else {
-            cardFront.style.transform = 'rotateY(0deg)';
-            cardBack.style.transform = 'rotateY(180deg)';
-        }
-    });
-
-    // Allow card flip on card click
-    cardContainer.addEventListener('click', function() {
-        flipBtn.click();
-    });
+    // Card spins automatically via CSS animation
+    // No user interaction needed
 }
 
 // ==================== FAQ ACCORDION ====================
