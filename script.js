@@ -57,31 +57,30 @@ function initializeNavigation() {
     });
 }
 
-// ==================== CARD FLIP ANIMATION ====================
+// ==================== CARD SPIN ANIMATION ====================
 /**
- * Initialize 3D card flip functionality
+ * Initialize 3D card spin functionality
+ * Card automatically spins - click to pause/resume
  */
 function initializeCardFlip() {
     const flipBtn = document.getElementById('flipCard');
-    const cardContainer = document.getElementById('cardContainer');
-    const cardFront = document.getElementById('cardFront');
-    const cardBack = document.getElementById('cardBack');
-    let isFlipped = false;
+    const cardWrapper = document.getElementById('cardContainer');
+    let isPaused = false;
 
     flipBtn.addEventListener('click', function() {
-        isFlipped = !isFlipped;
-        
-        if (isFlipped) {
-            cardFront.style.transform = 'rotateY(180deg)';
-            cardBack.style.transform = 'rotateY(0deg)';
+        isPaused = !isPaused;
+
+        if (isPaused) {
+            cardWrapper.style.animationPlayState = 'paused';
+            flipBtn.innerHTML = '<i class="fas fa-play"></i>';
         } else {
-            cardFront.style.transform = 'rotateY(0deg)';
-            cardBack.style.transform = 'rotateY(180deg)';
+            cardWrapper.style.animationPlayState = 'running';
+            flipBtn.innerHTML = '<i class="fas fa-pause"></i>';
         }
     });
 
-    // Allow card flip on card click
-    cardContainer.addEventListener('click', function() {
+    // Allow card pause/resume on card click
+    cardWrapper.addEventListener('click', function() {
         flipBtn.click();
     });
 }
