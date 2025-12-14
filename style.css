@@ -494,6 +494,7 @@ a:hover {
     display: flex;
     justify-content: center;
     align-items: center;
+    min-height: 350px;
 }
 
 .card-3d-container {
@@ -730,13 +731,7 @@ a:hover {
 }
 
 .card-status {
-    display: flex;
-    justify-content: center;
-    gap: 3rem;
-    margin-top: 2rem;
-    padding-top: 2rem;
-    border-top: 1px solid rgba(212, 175, 55, 0.1);
-    flex-wrap: wrap;
+    display: none;
 }
 
 .status-item {
@@ -829,13 +824,13 @@ a:hover {
 /* ==================== HOW IT WORKS ==================== */
 .steps-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 2rem;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1.5rem;
     margin-top: 4rem;
 }
 
 .step-card {
-    padding: 2.5rem;
+    padding: 2rem 1.5rem;
     background: rgba(26, 26, 26, 0.5);
     border: 1px solid rgba(212, 175, 55, 0.2);
     border-radius: 20px;
@@ -1388,6 +1383,11 @@ a:hover {
 
     .hero-features {
         grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .steps-grid {
+        grid-template-columns: repeat(2, 1fr);
         gap: 1.5rem;
     }
 }
