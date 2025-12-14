@@ -60,29 +60,11 @@ function initializeNavigation() {
 // ==================== CARD SPIN ANIMATION ====================
 /**
  * Initialize 3D card spin functionality
- * Card automatically spins - click to pause/resume
+ * Card automatically spins continuously
  */
 function initializeCardFlip() {
-    const flipBtn = document.getElementById('flipCard');
-    const cardWrapper = document.getElementById('cardContainer');
-    let isPaused = false;
-
-    flipBtn.addEventListener('click', function() {
-        isPaused = !isPaused;
-
-        if (isPaused) {
-            cardWrapper.style.animationPlayState = 'paused';
-            flipBtn.innerHTML = '<i class="fas fa-play"></i>';
-        } else {
-            cardWrapper.style.animationPlayState = 'running';
-            flipBtn.innerHTML = '<i class="fas fa-pause"></i>';
-        }
-    });
-
-    // Allow card pause/resume on card click
-    cardWrapper.addEventListener('click', function() {
-        flipBtn.click();
-    });
+    // Card spins automatically via CSS animation
+    // No user interaction needed
 }
 
 // ==================== FAQ ACCORDION ====================
