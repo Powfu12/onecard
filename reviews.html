@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Reviews - 1Card Premium Prepaid Cards</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Main Styles -->
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        /* Reviews Page Specific Styles */
+        .reviews-page {
+            min-height: 100vh;
+            padding: 120px 0 4rem;
+            background: var(--black);
+        }
+
+        /* Stats Section */
+        .stats-section {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background: rgba(26, 26, 26, 0.5);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--gold);
+            box-shadow: 0 20px 60px rgba(212, 175, 55, 0.4);
+        }
+
+        .stat-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .stat-icon.rating { color: var(--gold); text-shadow: 0 0 20px rgba(212, 175, 55, 0.4); }
+        .stat-icon.reviews { color: var(--gold); text-shadow: 0 0 20px rgba(212, 175, 55, 0.4); }
+        .stat-icon.customers { color: var(--gold); text-shadow: 0 0 20px rgba(212, 175, 55, 0.4); }
+        .stat-icon.verified { color: var(--gold); text-shadow: 0 0 20px rgba(212, 175, 55, 0.4); }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 0.5rem;
+            line-height: 1.2;
+        }
+
+        .stat-label {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+        }
+
+        /* Main Content Grid */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 2rem;
+            align-items: start;
+        }
+
+        /* Reviews Section */
+        .reviews-section {
+            background: rgba(26, 26, 26, 0.5);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 20px;
+            padding: 2.5rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: var(--white);
+            font-weight: 600;
+        }
+
+        .section-title i {
+            color: var(--gold);
+            text-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+        }
+
+        /* Review Card */
+        .review-card {
+            background: rgba(15, 15, 15, 0.6);
+            border: 1px solid rgba(212, 175, 55, 0.15);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s;
+            animation: fadeInUp 0.5s;
+        }
+
+        .review-card:hover {
+            transform: translateX(5px);
+            border-color: var(--gold);
+            box-shadow: 0 30px 80px rgba(212, 175, 55, 0.4);
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .review-author {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            background: var(--gradient-gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--black);
+            box-shadow: 0 15px 40px rgba(212, 175, 55, 0.5);
+        }
+
+        .author-info h4 {
+            color: var(--white);
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
+            font-weight: 600;
+        }
+
+        .review-date {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.8rem;
+        }
+
+        .review-rating {
+            display: flex;
+            gap: 0.25rem;
+            font-size: 1.1rem;
+        }
+
+        .star {
+            color: rgba(255, 255, 255, 0.2);
+        }
+
+        .star.filled {
+            color: var(--gold);
+            text-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+        }
+
+        .review-text {
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.7;
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+            white-space: pre-line;
+            word-break: break-word;
+        }
+
+        .review-image {
+            max-width: 100%;
+            border-radius: 12px;
+            margin: 1rem 0;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .review-image:hover {
+            transform: scale(1.02);
+        }
+
+        .review-footer {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem 0.75rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(212, 175, 55, 0.15);
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .footer-left {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem 0.75rem;
+            align-items: center;
+        }
+
+        .review-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 0.8rem;
+            background: rgba(212, 175, 55, 0.1);
+            border: 1px solid var(--gold);
+            border-radius: 50px;
+            color: var(--gold);
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .review-badge.verified {
+            background: rgba(212, 175, 55, 0.15);
+        }
+
+        .review-like-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 50px;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.8rem;
+            font-weight: 500;
+            padding: 0.6rem 0.9rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .review-like-btn .heart {
+            color: var(--gold);
+        }
+
+        .review-like-btn.liked {
+            border-color: var(--gold);
+            background: rgba(212, 175, 55, 0.1);
+            color: var(--gold);
+            box-shadow: 0 20px 40px rgba(212, 175, 55, 0.4);
+        }
+
+        /* Submit Review Form */
+        .submit-review-section {
+            background: rgba(26, 26, 26, 0.5);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 20px;
+            padding: 2.5rem;
+            position: sticky;
+            top: 100px;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .form-input,
+        .form-select,
+        .form-textarea {
+            width: 100%;
+            padding: 1rem;
+            background: rgba(15, 15, 15, 0.6);
+            border: 2px solid rgba(212, 175, 55, 0.2);
+            border-radius: 12px;
+            color: var(--white);
+            font-size: 1rem;
+            transition: all 0.3s;
+            font-family: inherit;
+        }
+
+        .form-select {
+            appearance: none;
+            background-image:
+                linear-gradient(45deg, transparent 50%, var(--gold) 50%),
+                linear-gradient(135deg, var(--gold) 50%, transparent 50%);
+            background-position:
+                calc(100% - 20px) calc(50% - 3px),
+                calc(100% - 15px) calc(50% - 3px);
+            background-size: 5px 5px, 5px 5px;
+            background-repeat: no-repeat;
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .form-input:focus,
+        .form-textarea:focus,
+        .form-select:focus {
+            outline: none;
+            border-color: var(--gold);
+            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+        }
+
+        .form-input::placeholder,
+        .form-textarea::placeholder {
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Star Rating Selector */
+        .star-selector {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .star-btn {
+            background: none;
+            border: none;
+            font-size: 2rem;
+            color: rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .star-btn:hover,
+        .star-btn.active {
+            color: var(--gold);
+            transform: scale(1.15);
+            text-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+        }
+
+        .rating-label {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Image Upload */
+        .image-upload-container {
+            margin: 1rem 0;
+        }
+
+        .image-upload-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            padding: 1.5rem;
+            background: rgba(212, 175, 55, 0.05);
+            border: 2px dashed rgba(212, 175, 55, 0.3);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .image-upload-label:hover {
+            background: rgba(212, 175, 55, 0.1);
+            border-color: var(--gold);
+        }
+
+        .image-upload-label i {
+            color: var(--gold);
+            font-size: 1.5rem;
+        }
+
+        .image-upload-input {
+            display: none;
+        }
+
+        .image-preview {
+            margin-top: 1rem;
+            position: relative;
+        }
+
+        .image-preview img {
+            max-width: 100%;
+            border-radius: 12px;
+            border: 2px solid rgba(212, 175, 55, 0.3);
+        }
+
+        .remove-image-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid var(--gold);
+            color: var(--white);
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .remove-image-btn:hover {
+            background: var(--gold);
+            color: var(--black);
+        }
+
+        /* Submit Button */
+        .btn-submit {
+            width: 100%;
+            padding: 1rem 2rem;
+            background: var(--gradient-gold);
+            border: none;
+            border-radius: 12px;
+            color: var(--black);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            box-shadow: 0 20px 50px rgba(212, 175, 55, 0.5);
+        }
+
+        .btn-submit:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 30px 60px rgba(212, 175, 55, 0.6);
+        }
+
+        .btn-submit:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* Info Box */
+        .info-box {
+            background: rgba(212, 175, 55, 0.08);
+            border: 1px solid var(--gold);
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .info-box p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.8rem;
+            line-height: 1.6;
+        }
+
+        .info-box i {
+            color: var(--gold);
+            margin-right: 0.5rem;
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: rgba(26, 26, 26, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8);
+            animation: slideIn 0.3s ease;
+            z-index: 10000;
+            min-width: 220px;
+            max-width: 300px;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(20px) scale(0.95); opacity: 0; }
+            to { transform: translateY(0) scale(1); opacity: 1; }
+        }
+
+        .toast.success { border-color: var(--gold); }
+        .toast.error { border-color: #ef4444; }
+
+        .toast-icon {
+            font-size: 1.25rem;
+            color: var(--gold);
+        }
+
+        .toast.error .toast-icon {
+            color: #ef4444;
+        }
+
+        .toast-message {
+            color: var(--white);
+            font-weight: 500;
+        }
+
+        /* Spinner */
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top-color: var(--black);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* No Reviews */
+        .no-reviews {
+            text-align: center;
+            padding: 3rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .no-reviews-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            color: rgba(212, 175, 55, 0.3);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .submit-review-section {
+                position: relative;
+                top: 0;
+            }
+
+            .stats-section {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .reviews-page {
+                padding: 100px 0 3rem;
+            }
+
+            .container {
+                padding: 2rem 1rem;
+            }
+
+            .content-grid {
+                display: flex;
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+
+            .submit-review-section {
+                order: 1;
+                padding: 1.5rem;
+                width: 100%;
+                max-width: 520px;
+                margin: 0 auto;
+            }
+
+            .reviews-section {
+                order: 2;
+                padding: 1.5rem;
+            }
+
+            .stats-section {
+                grid-template-columns: 1fr;
+            }
+
+            .review-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .review-footer {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <div class="navbar-logo">
+                <a href="index.html">1CARD</a>
+                <span class="logo-badge">Verified</span>
+            </div>
+
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="index.html" class="nav-link">Home</a></li>
+                <li class="nav-item"><a href="index.html#how-it-works" class="nav-link">How It Works</a></li>
+                <li class="nav-item"><a href="index.html#pricing" class="nav-link">Pricing</a></li>
+                <li class="nav-item"><a href="reviews.html" class="nav-link">Reviews</a></li>
+            </ul>
+
+            <div class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="reviews-page">
+        <div class="container">
+            <!-- Stats Section -->
+            <div class="stats-section">
+                <div class="stat-card">
+                    <div class="stat-icon rating">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <div class="stat-value" id="avgRating">0.0</div>
+                    <div class="stat-label">Average Rating</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon reviews">
+                        <i class="fas fa-comment-dots"></i>
+                    </div>
+                    <div class="stat-value" id="totalReviews">0</div>
+                    <div class="stat-label">Total Reviews</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon customers">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-value">500+</div>
+                    <div class="stat-label">Happy Customers</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon verified">
+                        <i class="fas fa-shield-check"></i>
+                    </div>
+                    <div class="stat-value">100%</div>
+                    <div class="stat-label">Verified Reviews</div>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="content-grid">
+                <!-- Reviews List -->
+                <div class="reviews-section">
+                    <h2 class="section-title">
+                        <i class="fas fa-comments"></i>
+                        Customer Reviews
+                    </h2>
+                    <div id="reviewsList">
+                        <div class="no-reviews">
+                            <div class="no-reviews-icon">
+                                <i class="fas fa-inbox"></i>
+                            </div>
+                            <h3>No reviews yet</h3>
+                            <p>Be the first to leave a review!</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Submit Review Form -->
+                <div class="submit-review-section">
+                    <h2 class="section-title">
+                        <i class="fas fa-pen"></i>
+                        Submit Review
+                    </h2>
+
+                    <div class="info-box">
+                        <p>
+                            <i class="fas fa-info-circle"></i>
+                            Share your experience with 1Card
+                        </p>
+                    </div>
+
+                    <form id="reviewForm">
+                        <!-- Rating -->
+                        <div class="form-group">
+                            <label class="form-label">Your Rating</label>
+                            <div class="star-selector">
+                                <button type="button" class="star-btn" data-rating="1"><i class="fas fa-star"></i></button>
+                                <button type="button" class="star-btn" data-rating="2"><i class="fas fa-star"></i></button>
+                                <button type="button" class="star-btn" data-rating="3"><i class="fas fa-star"></i></button>
+                                <button type="button" class="star-btn" data-rating="4"><i class="fas fa-star"></i></button>
+                                <button type="button" class="star-btn" data-rating="5"><i class="fas fa-star"></i></button>
+                            </div>
+                            <div class="rating-label" id="ratingLabel">Tap to rate your experience</div>
+                        </div>
+
+                        <!-- Package -->
+                        <div class="form-group">
+                            <label class="form-label">Which package did you get?</label>
+                            <select class="form-select" id="packageSelect" required>
+                                <option value="">Select package</option>
+                                <option value="Basic">Basic - €100</option>
+                                <option value="Standard">Standard - €200</option>
+                                <option value="Professional">Professional - €300</option>
+                                <option value="Premium">Premium - €500</option>
+                            </select>
+                        </div>
+
+                        <!-- Review Text -->
+                        <div class="form-group">
+                            <label class="form-label">Your Review</label>
+                            <textarea
+                                class="form-textarea"
+                                id="reviewText"
+                                placeholder="Share your experience with 1Card..."
+                                required
+                            ></textarea>
+                        </div>
+
+                        <!-- Image Upload -->
+                        <div class="form-group">
+                            <label class="form-label">Add Image (Optional)</label>
+                            <div class="image-upload-container">
+                                <label for="imageUpload" class="image-upload-label">
+                                    <i class="fas fa-image"></i>
+                                    <span>Click to upload image</span>
+                                </label>
+                                <input
+                                    type="file"
+                                    id="imageUpload"
+                                    class="image-upload-input"
+                                    accept="image/*"
+                                >
+                                <div id="imagePreview" class="image-preview" style="display: none;">
+                                    <img id="previewImg" src="" alt="Preview">
+                                    <button type="button" class="remove-image-btn" id="removeImageBtn">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <button type="submit" class="btn-submit" id="submitBtn">
+                            <i class="fas fa-paper-plane"></i>
+                            <span>Submit Review</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                <p>© 2024 1Card. All rights reserved. | Secure | Trusted | Professional</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="script.js"></script>
+    <script type="module" src="reviews.js"></script>
+</body>
+</html>
