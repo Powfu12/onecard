@@ -37,24 +37,33 @@ const formData = {
 document.addEventListener('DOMContentLoaded', function() {
     console.log('Order system loaded');
 
-    // Use event delegation for dynamically handling button clicks
+    // Use event delegation for button clicks
     document.addEventListener('click', function(e) {
-        // Check if clicked element or its parent is a button with data-action
-        const button = e.target.closest('button[onclick]');
-        if (button) {
-            e.preventDefault();
-            const onclickAttr = button.getAttribute('onclick');
+        const button = e.target.closest('button');
 
-            // Parse the onclick attribute
-            if (onclickAttr.includes('nextStep')) {
-                const step = parseInt(onclickAttr.match(/\d+/)[0]);
-                nextStep(step);
-            } else if (onclickAttr.includes('prevStep')) {
-                const step = parseInt(onclickAttr.match(/\d+/)[0]);
-                prevStep(step);
-            } else if (onclickAttr.includes('confirmOrder')) {
-                confirmOrder();
-            }
+        if (!button) return;
+
+        // Handle next step buttons
+        if (button.hasAttribute('data-next-step')) {
+            e.preventDefault();
+            const step = parseInt(button.getAttribute('data-next-step'));
+            console.log('Next step button clicked:', step);
+            nextStep(step);
+        }
+
+        // Handle previous step buttons
+        else if (button.hasAttribute('data-prev-step')) {
+            e.preventDefault();
+            const step = parseInt(button.getAttribute('data-prev-step'));
+            console.log('Previous step button clicked:', step);
+            prevStep(step);
+        }
+
+        // Handle confirm order button
+        else if (button.hasAttribute('data-confirm-order')) {
+            e.preventDefault();
+            console.log('Confirm order button clicked');
+            confirmOrder();
         }
     });
 });
