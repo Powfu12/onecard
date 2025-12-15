@@ -34,39 +34,55 @@ const formData = {
 };
 
 // ==================== INITIALIZE EVENT LISTENERS ====================
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('Order system loaded');
+// Modules load after DOM, so we can attach directly
+console.log('Order system loading...');
 
-    // Use event delegation for button clicks
-    document.addEventListener('click', function(e) {
-        const button = e.target.closest('button');
+// Wait a bit to ensure DOM is ready
+setTimeout(function() {
+    console.log('Attaching button listeners...');
 
-        if (!button) return;
+    // Get all buttons with data attributes
+    const nextButtons = document.querySelectorAll('button[data-next-step]');
+    const prevButtons = document.querySelectorAll('button[data-prev-step]');
+    const confirmButton = document.querySelector('button[data-confirm-order]');
 
-        // Handle next step buttons
-        if (button.hasAttribute('data-next-step')) {
-            e.preventDefault();
-            const step = parseInt(button.getAttribute('data-next-step'));
-            console.log('Next step button clicked:', step);
-            nextStep(step);
-        }
-
-        // Handle previous step buttons
-        else if (button.hasAttribute('data-prev-step')) {
-            e.preventDefault();
-            const step = parseInt(button.getAttribute('data-prev-step'));
-            console.log('Previous step button clicked:', step);
-            prevStep(step);
-        }
-
-        // Handle confirm order button
-        else if (button.hasAttribute('data-confirm-order')) {
-            e.preventDefault();
-            console.log('Confirm order button clicked');
-            confirmOrder();
-        }
+    console.log('Found buttons:', {
+        next: nextButtons.length,
+        prev: prevButtons.length,
+        confirm: confirmButton ? 1 : 0
     });
-});
+
+    // Attach next step buttons
+    nextButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            const step = parseInt(this.getAttribute('data-next-step'));
+            console.log('Next button clicked, going to step:', step);
+            nextStep(step);
+        });
+    });
+
+    // Attach previous step buttons
+    prevButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            const step = parseInt(this.getAttribute('data-prev-step'));
+            console.log('Prev button clicked, going to step:', step);
+            prevStep(step);
+        });
+    });
+
+    // Attach confirm button
+    if (confirmButton) {
+        confirmButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            console.log('Confirm button clicked');
+            confirmOrder();
+        });
+    }
+
+    console.log('All button listeners attached successfully!');
+}, 100);
 
 // ==================== STEP NAVIGATION ====================
 function nextStep(step) {
