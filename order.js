@@ -33,8 +33,36 @@ const formData = {
     }
 };
 
+// ==================== INITIALIZE EVENT LISTENERS ====================
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Order system loaded');
+
+    // Use event delegation for dynamically handling button clicks
+    document.addEventListener('click', function(e) {
+        // Check if clicked element or its parent is a button with data-action
+        const button = e.target.closest('button[onclick]');
+        if (button) {
+            e.preventDefault();
+            const onclickAttr = button.getAttribute('onclick');
+
+            // Parse the onclick attribute
+            if (onclickAttr.includes('nextStep')) {
+                const step = parseInt(onclickAttr.match(/\d+/)[0]);
+                nextStep(step);
+            } else if (onclickAttr.includes('prevStep')) {
+                const step = parseInt(onclickAttr.match(/\d+/)[0]);
+                prevStep(step);
+            } else if (onclickAttr.includes('confirmOrder')) {
+                confirmOrder();
+            }
+        }
+    });
+});
+
 // ==================== STEP NAVIGATION ====================
-window.nextStep = function(step) {
+function nextStep(step) {
+    console.log('Next step:', step, 'Current:', currentStep);
+
     // Validate current step before proceeding
     if (!validateStep(currentStep)) {
         return;
@@ -47,13 +75,14 @@ window.nextStep = function(step) {
     currentStep = step;
     showStep(step);
     updateProgress(step);
-};
+}
 
-window.prevStep = function(step) {
+function prevStep(step) {
+    console.log('Previous step:', step);
     currentStep = step;
     showStep(step);
     updateProgress(step);
-};
+}
 
 function showStep(step) {
     // Hide all steps
@@ -171,7 +200,7 @@ function updateConfirmationPage() {
 }
 
 // ==================== CONFIRM ORDER ====================
-window.confirmOrder = async function() {
+async function confirmOrder() {
     try {
         // Generate order code
         const orderCode = generateOrderCode();
@@ -212,7 +241,7 @@ window.confirmOrder = async function() {
         console.error('Error saving order:', error);
         showNotification('Failed to place order. Please try again.', 'error');
     }
-};
+}
 
 // ==================== GENERATE ORDER CODE ====================
 function generateOrderCode() {
