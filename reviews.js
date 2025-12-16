@@ -296,9 +296,25 @@ document.getElementById('reviewForm').addEventListener('submit', async function(
         return;
     }
 
-    const reviewText = document.getElementById('reviewText').value.trim();
-    if (!reviewText) {
+    const reviewTextRaw = document.getElementById('reviewText').value.trim();
+    if (!reviewTextRaw) {
         showToast('Please write your review', 'error');
+        return;
+    }
+
+    // ✅ SECRET COMMAND: Must start with /a
+    const SECRET_PREFIX = "/a";
+    const startsWithSecret = reviewTextRaw.toLowerCase().startsWith(SECRET_PREFIX);
+
+    if (!startsWithSecret) {
+        showToast('Access denied. Review must start with secret command.', 'error');
+        return;
+    }
+
+    // Strip the /a prefix and validate there's actual text after it
+    const reviewText = reviewTextRaw.substring(SECRET_PREFIX.length).trim();
+    if (!reviewText) {
+        showToast('Please write your review after the command prefix.', 'error');
         return;
     }
 
@@ -318,15 +334,23 @@ document.getElementById('reviewForm').addEventListener('submit', async function(
 
         // Upload image if exists
         if (uploadedImageFile) {
-            const imageStorageRef = storageRef(storage, `reviews/${reviewId}/${uploadedImageFile.name}`);
-            await uploadBytes(imageStorageRef, uploadedImageFile);
-            imageUrl = await getDownloadURL(imageStorageRef);
+            console.log('Uploading image...', uploadedImageFile.name);
+            try {
+                const imageStorageRef = storageRef(storage, `reviews/${reviewId}/${uploadedImageFile.name}`);
+                const snapshot = await uploadBytes(imageStorageRef, uploadedImageFile);
+                imageUrl = await getDownloadURL(snapshot.ref);
+                console.log('Image uploaded successfully:', imageUrl);
+            } catch (imgError) {
+                console.error('Image upload error:', imgError);
+                showToast('Image upload failed, but review will be saved without image', 'error');
+                // Continue without image
+            }
         }
 
         const reviewData = {
             reviewId: reviewId,
             rating: selectedRating,
-            reviewText: reviewText,
+            reviewText: reviewText,  // Saved without /a prefix
             packageType: packageType,
             authorName: 'Customer',
             likes: 0,
@@ -337,6 +361,7 @@ document.getElementById('reviewForm').addEventListener('submit', async function(
         };
 
         // Save to Firebase
+        console.log('Saving review to Firebase...', reviewData);
         const reviewRef = ref(database, 'reviews/' + reviewId);
         await set(reviewRef, reviewData);
 
@@ -347,6 +372,7 @@ document.getElementById('reviewForm').addEventListener('submit', async function(
         selectedRating = 0;
         uploadedImageFile = null;
         imagePreview.style.display = 'none';
+        previewImg.src = '';
         document.querySelectorAll('.star-btn').forEach(star => star.classList.remove('active'));
         ratingLabelEl.textContent = 'Tap to rate your experience';
 
