@@ -33,8 +33,61 @@ const formData = {
     }
 };
 
+// ==================== INITIALIZE EVENT LISTENERS ====================
+// Modules load after DOM, so we can attach directly
+console.log('Order system loading...');
+
+// Wait a bit to ensure DOM is ready
+setTimeout(function() {
+    console.log('Attaching button listeners...');
+
+    // Get all buttons with data attributes
+    const nextButtons = document.querySelectorAll('button[data-next-step]');
+    const prevButtons = document.querySelectorAll('button[data-prev-step]');
+    const confirmButton = document.querySelector('button[data-confirm-order]');
+
+    console.log('Found buttons:', {
+        next: nextButtons.length,
+        prev: prevButtons.length,
+        confirm: confirmButton ? 1 : 0
+    });
+
+    // Attach next step buttons
+    nextButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            const step = parseInt(this.getAttribute('data-next-step'));
+            console.log('Next button clicked, going to step:', step);
+            nextStep(step);
+        });
+    });
+
+    // Attach previous step buttons
+    prevButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            const step = parseInt(this.getAttribute('data-prev-step'));
+            console.log('Prev button clicked, going to step:', step);
+            prevStep(step);
+        });
+    });
+
+    // Attach confirm button
+    if (confirmButton) {
+        confirmButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            console.log('Confirm button clicked');
+            confirmOrder();
+        });
+    }
+
+    console.log('All button listeners attached successfully!');
+}, 100);
+
 // ==================== STEP NAVIGATION ====================
-window.nextStep = function(step) {
+function nextStep(step) {
+    console.log('Next step:', step, 'Current:', currentStep);
+
     // Validate current step before proceeding
     if (!validateStep(currentStep)) {
         return;
@@ -47,13 +100,14 @@ window.nextStep = function(step) {
     currentStep = step;
     showStep(step);
     updateProgress(step);
-};
+}
 
-window.prevStep = function(step) {
+function prevStep(step) {
+    console.log('Previous step:', step);
     currentStep = step;
     showStep(step);
     updateProgress(step);
-};
+}
 
 function showStep(step) {
     // Hide all steps
@@ -171,7 +225,7 @@ function updateConfirmationPage() {
 }
 
 // ==================== CONFIRM ORDER ====================
-window.confirmOrder = async function() {
+async function confirmOrder() {
     try {
         // Generate order code
         const orderCode = generateOrderCode();
@@ -212,7 +266,7 @@ window.confirmOrder = async function() {
         console.error('Error saving order:', error);
         showNotification('Failed to place order. Please try again.', 'error');
     }
-};
+}
 
 // ==================== GENERATE ORDER CODE ====================
 function generateOrderCode() {
