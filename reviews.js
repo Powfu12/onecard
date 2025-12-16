@@ -1,7 +1,6 @@
 // Import Firebase modules
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
 import { getDatabase, ref, push, set, onValue, query, orderByChild, update } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js";
-import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-storage.js";
 
 // Firebase configuration
 const firebaseConfig = {
@@ -17,7 +16,6 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
-const storage = getStorage(app);
 
 console.log('🔥 Firebase Initialized for Reviews');
 
@@ -332,16 +330,20 @@ document.getElementById('reviewForm').addEventListener('submit', async function(
         const reviewId = generateReviewId();
         let imageUrl = null;
 
-        // Upload image if exists
+        // Convert image to base64 if exists
         if (uploadedImageFile) {
-            console.log('Uploading image...', uploadedImageFile.name);
+            console.log('Converting image to base64...', uploadedImageFile.name);
             try {
-                const imageStorageRef = storageRef(storage, `reviews/${reviewId}/${uploadedImageFile.name}`);
-                const snapshot = await uploadBytes(imageStorageRef, uploadedImageFile);
-                imageUrl = await getDownloadURL(snapshot.ref);
-                console.log('Image uploaded successfully:', imageUrl);
+                // Convert image to base64
+                const reader = new FileReader();
+                imageUrl = await new Promise((resolve, reject) => {
+                    reader.onload = (e) => resolve(e.target.result);
+                    reader.onerror = reject;
+                    reader.readAsDataURL(uploadedImageFile);
+                });
+                console.log('Image converted successfully');
             } catch (imgError) {
-                console.error('Image upload error:', imgError);
+                console.error('Image conversion error:', imgError);
                 showToast('Image upload failed, but review will be saved without image', 'error');
                 // Continue without image
             }
