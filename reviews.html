@@ -222,25 +222,29 @@
             white-space: pre-line;
             word-break: break-word;
             letter-spacing: 0.2px;
+            overflow: hidden;
         }
 
         .review-image {
-            max-width: 140px;
-            max-height: 140px;
+            width: 220px;
+            height: 220px;
             object-fit: cover;
-            border-radius: 12px;
-            margin: 0.25rem 0 1rem 1.5rem;
+            border-radius: 16px;
+            margin: 0 0 1.5rem 2rem;
             float: right;
             cursor: pointer;
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            border: 2px solid rgba(212, 175, 55, 0.25);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            border: 3px solid transparent;
+            background: linear-gradient(rgba(20, 20, 20, 0.9), rgba(20, 20, 20, 0.9)) padding-box,
+                        linear-gradient(135deg, rgba(212, 175, 55, 0.4), rgba(212, 175, 55, 0.2)) border-box;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6), 0 0 30px rgba(212, 175, 55, 0.2);
         }
 
         .review-image:hover {
-            transform: translateY(-6px) scale(1.03);
-            border-color: var(--gold);
-            box-shadow: 0 12px 40px rgba(212, 175, 55, 0.35), 0 0 40px rgba(212, 175, 55, 0.15);
+            transform: translateY(-8px) scale(1.05);
+            background: linear-gradient(rgba(20, 20, 20, 0.9), rgba(20, 20, 20, 0.9)) padding-box,
+                        linear-gradient(135deg, var(--gold), rgba(212, 175, 55, 0.5)) border-box;
+            box-shadow: 0 20px 60px rgba(212, 175, 55, 0.5), 0 0 80px rgba(212, 175, 55, 0.3), 0 10px 40px rgba(0, 0, 0, 0.7);
         }
 
         .review-footer {
@@ -661,9 +665,10 @@
             }
 
             .review-image {
-                max-width: 110px;
-                max-height: 110px;
-                margin: 0.25rem 0 1rem 1rem;
+                width: 160px;
+                height: 160px;
+                margin: 0 0 1.25rem 1.25rem;
+                float: right;
             }
 
             .review-card {
@@ -674,6 +679,10 @@
                 width: 48px;
                 height: 48px;
                 font-size: 1.1rem;
+            }
+
+            .review-text {
+                font-size: 0.95rem;
             }
         }
     </style>
