@@ -216,20 +216,21 @@
 
         .review-body {
             display: grid;
-            grid-template-columns: 1fr auto;
-            gap: 2.5rem;
-            align-items: center;
+            grid-template-columns: 1fr 300px;
+            gap: 3rem;
+            align-items: start;
             margin-bottom: 1.5rem;
         }
 
         .review-content {
             min-width: 0;
+            padding-right: 1rem;
         }
 
         .review-text {
             color: rgba(255, 255, 255, 0.85);
             line-height: 1.8;
-            font-size: 0.98rem;
+            font-size: 1rem;
             margin: 0;
             white-space: pre-line;
             word-break: break-word;
@@ -240,26 +241,30 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            background: rgba(10, 10, 10, 0.4);
+            border-radius: 20px;
+            padding: 1rem;
+            border: 1px solid rgba(212, 175, 55, 0.15);
         }
 
         .review-image {
-            width: 220px;
-            height: 220px;
+            width: 100%;
+            height: 280px;
             object-fit: cover;
             border-radius: 16px;
             cursor: pointer;
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            border: 3px solid transparent;
-            background: linear-gradient(rgba(20, 20, 20, 0.9), rgba(20, 20, 20, 0.9)) padding-box,
-                        linear-gradient(135deg, rgba(212, 175, 55, 0.4), rgba(212, 175, 55, 0.2)) border-box;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6), 0 0 30px rgba(212, 175, 55, 0.2);
+            border: 4px solid transparent;
+            background: linear-gradient(rgba(15, 15, 15, 0.95), rgba(15, 15, 15, 0.95)) padding-box,
+                        linear-gradient(135deg, rgba(212, 175, 55, 0.5), rgba(212, 175, 55, 0.3)) border-box;
+            box-shadow: 0 12px 48px rgba(0, 0, 0, 0.7), 0 0 40px rgba(212, 175, 55, 0.25);
         }
 
         .review-image:hover {
-            transform: translateY(-8px) scale(1.05);
-            background: linear-gradient(rgba(20, 20, 20, 0.9), rgba(20, 20, 20, 0.9)) padding-box,
-                        linear-gradient(135deg, var(--gold), rgba(212, 175, 55, 0.5)) border-box;
-            box-shadow: 0 20px 60px rgba(212, 175, 55, 0.5), 0 0 80px rgba(212, 175, 55, 0.3), 0 10px 40px rgba(0, 0, 0, 0.7);
+            transform: translateY(-6px);
+            background: linear-gradient(rgba(15, 15, 15, 0.95), rgba(15, 15, 15, 0.95)) padding-box,
+                        linear-gradient(135deg, var(--gold), rgba(212, 175, 55, 0.6)) border-box;
+            box-shadow: 0 24px 64px rgba(212, 175, 55, 0.5), 0 0 100px rgba(212, 175, 55, 0.35), 0 12px 48px rgba(0, 0, 0, 0.8);
         }
 
         .review-footer {
@@ -680,17 +685,21 @@
 
             .review-body {
                 grid-template-columns: 1fr;
-                gap: 1.5rem;
+                gap: 2rem;
+            }
+
+            .review-content {
+                padding-right: 0;
             }
 
             .review-image-container {
                 order: -1;
+                padding: 0.75rem;
             }
 
             .review-image {
                 width: 100%;
-                max-width: 280px;
-                height: 280px;
+                height: 300px;
             }
 
             .review-card {
