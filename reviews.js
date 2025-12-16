@@ -179,9 +179,16 @@ function createReviewCard(review) {
             </div>
         </div>
 
-        <p class="review-text">${escapeHTML(review.reviewText || '')}</p>
-
-        ${review.imageUrl ? `<img src="${escapeHTML(review.imageUrl)}" alt="Review image" class="review-image" onclick="window.open('${escapeHTML(review.imageUrl)}', '_blank')">` : ''}
+        <div class="review-body">
+            <div class="review-content">
+                <p class="review-text">${escapeHTML(review.reviewText || '')}</p>
+            </div>
+            ${review.imageUrl ? `
+                <div class="review-image-container">
+                    <img src="${escapeHTML(review.imageUrl)}" alt="Review image" class="review-image" onclick="window.open('${escapeHTML(review.imageUrl)}', '_blank')">
+                </div>
+            ` : ''}
+        </div>
 
         <div class="review-footer">
             <div class="footer-left">
