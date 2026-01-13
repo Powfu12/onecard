@@ -1,0 +1,1108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Admin Dashboard - 1Card">
+    <title>Admin Dashboard - 1Card</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .dashboard-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* ==================== HEADER ==================== */
+        .dashboard-header {
+            margin-bottom: 3rem;
+            text-align: center;
+        }
+
+        .dashboard-header h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #d4af37 0%, #f4e5c2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .dashboard-header p {
+            color: #b0b0b0;
+            font-size: 1rem;
+        }
+
+        /* ==================== STATS CARDS ==================== */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            padding: 2rem;
+            border-radius: 16px;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, #d4af37 0%, #f4e5c2 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .stat-card:hover::before {
+            opacity: 1;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 35px rgba(212, 175, 55, 0.25);
+            border-color: rgba(212, 175, 55, 0.4);
+        }
+
+        .stat-card-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #d4af37 0%, #f4e5c2 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+        }
+
+        .stat-card-icon i {
+            font-size: 1.8rem;
+            color: #1a1a1a;
+        }
+
+        .stat-card-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #d4af37;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card-label {
+            font-size: 0.95rem;
+            color: #b0b0b0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* ==================== FILTERS ==================== */
+        .filters-section {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            padding: 2rem;
+            border-radius: 16px;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            margin-bottom: 2rem;
+        }
+
+        .filters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .filter-group label {
+            color: #d4af37;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .filter-group input,
+        .filter-group select {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            color: #ffffff;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        .filter-group input:focus,
+        .filter-group select:focus {
+            outline: none;
+            border-color: #d4af37;
+            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+        }
+
+        .filter-group select option {
+            background: #1a1a1a;
+            color: #ffffff;
+        }
+
+        .filter-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #d4af37 0%, #f4e5c2 100%);
+            color: #1a1a1a;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(212, 175, 55, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(212, 175, 55, 0.4);
+        }
+
+        /* ==================== ORDERS TABLE ==================== */
+        .orders-section {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            padding: 2rem;
+            border-radius: 16px;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            overflow-x: auto;
+        }
+
+        .orders-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .orders-header h2 {
+            color: #d4af37;
+            font-size: 1.5rem;
+        }
+
+        .orders-count {
+            background: rgba(212, 175, 55, 0.1);
+            color: #d4af37;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        .orders-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 800px;
+        }
+
+        .orders-table thead {
+            background: rgba(212, 175, 55, 0.1);
+        }
+
+        .orders-table th {
+            padding: 1rem;
+            text-align: left;
+            color: #d4af37;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 0.5px;
+        }
+
+        .orders-table td {
+            padding: 1rem;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+            color: #e0e0e0;
+        }
+
+        .orders-table tbody tr {
+            transition: all 0.2s ease;
+        }
+
+        .orders-table tbody tr:hover {
+            background: rgba(212, 175, 55, 0.05);
+        }
+
+        /* Status Badge */
+        .status-badge {
+            display: inline-block;
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-pending {
+            background: rgba(255, 193, 7, 0.2);
+            color: #ffc107;
+            border: 1px solid rgba(255, 193, 7, 0.4);
+        }
+
+        .status-paid {
+            background: rgba(76, 175, 80, 0.2);
+            color: #4caf50;
+            border: 1px solid rgba(76, 175, 80, 0.4);
+        }
+
+        .status-shipped {
+            background: rgba(33, 150, 243, 0.2);
+            color: #2196f3;
+            border: 1px solid rgba(33, 150, 243, 0.4);
+        }
+
+        .status-delivered {
+            background: rgba(156, 39, 176, 0.2);
+            color: #9c27b0;
+            border: 1px solid rgba(156, 39, 176, 0.4);
+        }
+
+        .status-cancelled {
+            background: rgba(244, 67, 54, 0.2);
+            color: #f44336;
+            border: 1px solid rgba(244, 67, 54, 0.4);
+        }
+
+        /* Status Dropdown */
+        .status-select {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 6px;
+            padding: 0.5rem;
+            color: #ffffff;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .status-select:focus {
+            outline: none;
+            border-color: #d4af37;
+        }
+
+        .status-select option {
+            background: #1a1a1a;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-action {
+            padding: 0.5rem;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 35px;
+            height: 35px;
+        }
+
+        .btn-view {
+            background: rgba(33, 150, 243, 0.2);
+            color: #2196f3;
+            border: 1px solid rgba(33, 150, 243, 0.4);
+        }
+
+        .btn-view:hover {
+            background: rgba(33, 150, 243, 0.3);
+        }
+
+        .btn-delete {
+            background: rgba(244, 67, 54, 0.2);
+            color: #f44336;
+            border: 1px solid rgba(244, 67, 54, 0.4);
+        }
+
+        .btn-delete:hover {
+            background: rgba(244, 67, 54, 0.3);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            border: 2px solid rgba(212, 175, 55, 0.3);
+            border-radius: 16px;
+            padding: 2rem;
+            max-width: 600px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+        }
+
+        .modal-header h2 {
+            color: #d4af37;
+            font-size: 1.5rem;
+        }
+
+        .modal-close {
+            background: rgba(244, 67, 54, 0.2);
+            color: #f44336;
+            border: 1px solid rgba(244, 67, 54, 0.4);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .modal-close:hover {
+            background: rgba(244, 67, 54, 0.3);
+            transform: rotate(90deg);
+        }
+
+        .modal-body {
+            margin-bottom: 1.5rem;
+        }
+
+        .detail-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .detail-label {
+            color: #d4af37;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.5rem;
+        }
+
+        .detail-value {
+            color: #e0e0e0;
+            font-size: 1rem;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 0.75rem;
+            border-radius: 8px;
+            border: 1px solid rgba(212, 175, 55, 0.1);
+        }
+
+        /* Loading Spinner */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 3rem;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(212, 175, 55, 0.2);
+            border-top-color: #d4af37;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            color: rgba(212, 175, 55, 0.3);
+            margin-bottom: 1rem;
+        }
+
+        .empty-state h3 {
+            color: #d4af37;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .empty-state p {
+            color: #b0b0b0;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+
+            .dashboard-header h1 {
+                font-size: 2rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .filters-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .filter-actions {
+                flex-direction: column;
+            }
+
+            .orders-header {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
+            }
+
+            .orders-table {
+                font-size: 0.85rem;
+            }
+
+            .orders-table th,
+            .orders-table td {
+                padding: 0.75rem 0.5rem;
+            }
+
+            .modal-content {
+                padding: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .dashboard-header h1 {
+                font-size: 1.75rem;
+            }
+
+            .stat-card {
+                padding: 1.5rem;
+            }
+
+            .stat-card-value {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Header -->
+        <div class="dashboard-header">
+            <h1><i class="fas fa-tachometer-alt"></i> Admin Dashboard</h1>
+            <p>Manage your orders and monitor business performance</p>
+        </div>
+
+        <!-- Statistics Cards -->
+        <div class="stats-grid" id="statsGrid">
+            <div class="stat-card">
+                <div class="stat-card-icon">
+                    <i class="fas fa-shopping-cart"></i>
+                </div>
+                <div class="stat-card-value" id="totalOrders">0</div>
+                <div class="stat-card-label">Total Orders</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-card-icon">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div class="stat-card-value" id="pendingOrders">0</div>
+                <div class="stat-card-label">Pending</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-card-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div class="stat-card-value" id="paidOrders">0</div>
+                <div class="stat-card-label">Paid</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-card-icon">
+                    <i class="fas fa-shipping-fast"></i>
+                </div>
+                <div class="stat-card-value" id="shippedOrders">0</div>
+                <div class="stat-card-label">Shipped</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-card-icon">
+                    <i class="fas fa-box-open"></i>
+                </div>
+                <div class="stat-card-value" id="deliveredOrders">0</div>
+                <div class="stat-card-label">Delivered</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-card-icon">
+                    <i class="fas fa-dollar-sign"></i>
+                </div>
+                <div class="stat-card-value" id="totalRevenue">€0</div>
+                <div class="stat-card-label">Total Revenue</div>
+            </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="filters-section">
+            <div class="filters-grid">
+                <div class="filter-group">
+                    <label for="searchInput">
+                        <i class="fas fa-search"></i> Search
+                    </label>
+                    <input
+                        type="text"
+                        id="searchInput"
+                        placeholder="Search by order code, email, name..."
+                    >
+                </div>
+
+                <div class="filter-group">
+                    <label for="statusFilter">
+                        <i class="fas fa-filter"></i> Status Filter
+                    </label>
+                    <select id="statusFilter">
+                        <option value="">All Statuses</option>
+                        <option value="Pending">Pending</option>
+                        <option value="Paid">Paid</option>
+                        <option value="Shipped">Shipped</option>
+                        <option value="Delivered">Delivered</option>
+                        <option value="Cancelled">Cancelled</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="packageFilter">
+                        <i class="fas fa-box"></i> Package Filter
+                    </label>
+                    <select id="packageFilter">
+                        <option value="">All Packages</option>
+                        <option value="Basic Package">Basic Package</option>
+                        <option value="Standard Package">Standard Package</option>
+                        <option value="Professional Package">Professional Package</option>
+                        <option value="Delivery Package">Delivery Package</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="filter-actions">
+                <button class="btn btn-primary" onclick="applyFilters()">
+                    <i class="fas fa-check"></i> Apply Filters
+                </button>
+                <button class="btn btn-secondary" onclick="resetFilters()">
+                    <i class="fas fa-redo"></i> Reset
+                </button>
+                <button class="btn btn-secondary" onclick="refreshData()">
+                    <i class="fas fa-sync"></i> Refresh Data
+                </button>
+            </div>
+        </div>
+
+        <!-- Orders Table -->
+        <div class="orders-section">
+            <div class="orders-header">
+                <h2><i class="fas fa-list"></i> Orders</h2>
+                <div class="orders-count" id="ordersCount">0 Orders</div>
+            </div>
+
+            <div id="tableContainer">
+                <div class="loading">
+                    <div class="spinner"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Order Details Modal -->
+    <div class="modal" id="orderModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-file-invoice"></i> Order Details</h2>
+                <button class="modal-close" onclick="closeModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Order details will be populated here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js';
+        import { getDatabase, ref, onValue, update, remove } from 'https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js';
+
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAftSnrCDt34hbl0_HCOfFB9ehUdiXL3sw",
+            authDomain: "onecard-ce39b.firebaseapp.com",
+            databaseURL: "https://onecard-ce39b-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "onecard-ce39b",
+            storageBucket: "onecard-ce39b.firebasestorage.app",
+            messagingSenderId: "163529886210",
+            appId: "1:163529886210:web:76196a43671fec10afb51b"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        // Global variables
+        let allOrders = [];
+        let filteredOrders = [];
+
+        // Load orders from Firebase
+        function loadOrders() {
+            const ordersRef = ref(database, 'orders');
+
+            onValue(ordersRef, (snapshot) => {
+                if (snapshot.exists()) {
+                    const data = snapshot.val();
+                    allOrders = Object.keys(data).map(key => ({
+                        id: key,
+                        ...data[key]
+                    }));
+
+                    // Sort by date (newest first)
+                    allOrders.sort((a, b) => {
+                        return new Date(b.orderDate) - new Date(a.orderDate);
+                    });
+
+                    filteredOrders = [...allOrders];
+                    updateStatistics();
+                    renderOrdersTable();
+                } else {
+                    allOrders = [];
+                    filteredOrders = [];
+                    updateStatistics();
+                    renderEmptyState();
+                }
+            });
+        }
+
+        // Update statistics
+        function updateStatistics() {
+            const stats = {
+                total: allOrders.length,
+                pending: 0,
+                paid: 0,
+                shipped: 0,
+                delivered: 0,
+                revenue: 0
+            };
+
+            allOrders.forEach(order => {
+                const status = order.status?.toLowerCase() || 'pending';
+
+                if (status === 'pending' || status === 'waiting for payment') {
+                    stats.pending++;
+                } else if (status === 'paid' || status.includes('paid')) {
+                    stats.paid++;
+                } else if (status === 'shipped' || status.includes('ship')) {
+                    stats.shipped++;
+                } else if (status === 'delivered' || status.includes('deliver')) {
+                    stats.delivered++;
+                }
+
+                // Calculate revenue (only for paid/shipped/delivered orders)
+                if (status !== 'pending' && status !== 'cancelled') {
+                    const price = parseFloat(order.pricing?.totalPrice || 0);
+                    stats.revenue += price;
+                }
+            });
+
+            document.getElementById('totalOrders').textContent = stats.total;
+            document.getElementById('pendingOrders').textContent = stats.pending;
+            document.getElementById('paidOrders').textContent = stats.paid;
+            document.getElementById('shippedOrders').textContent = stats.shipped;
+            document.getElementById('deliveredOrders').textContent = stats.delivered;
+            document.getElementById('totalRevenue').textContent = '€' + stats.revenue.toFixed(2);
+        }
+
+        // Render orders table
+        function renderOrdersTable() {
+            const container = document.getElementById('tableContainer');
+
+            if (filteredOrders.length === 0) {
+                renderEmptyState();
+                return;
+            }
+
+            document.getElementById('ordersCount').textContent = `${filteredOrders.length} Orders`;
+
+            const tableHTML = `
+                <div class="table-wrapper">
+                    <table class="orders-table">
+                        <thead>
+                            <tr>
+                                <th>Order Code</th>
+                                <th>Customer</th>
+                                <th>Package</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                                <th>Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${filteredOrders.map(order => `
+                                <tr>
+                                    <td><strong>${order.orderCode || 'N/A'}</strong></td>
+                                    <td>
+                                        <div>${order.personalInfo?.fullName || 'N/A'}</div>
+                                        <div style="font-size: 0.85rem; color: #b0b0b0;">${order.personalInfo?.email || 'N/A'}</div>
+                                    </td>
+                                    <td>${order.selectedPackage || 'N/A'}</td>
+                                    <td><strong>€${order.pricing?.totalPrice || '0.00'}</strong></td>
+                                    <td>
+                                        <select class="status-select" onchange="updateOrderStatus('${order.id}', this.value)">
+                                            <option value="Pending" ${(order.status || 'Pending') === 'Pending' ? 'selected' : ''}>Pending</option>
+                                            <option value="Paid" ${order.status === 'Paid' ? 'selected' : ''}>Paid</option>
+                                            <option value="Shipped" ${order.status === 'Shipped' ? 'selected' : ''}>Shipped</option>
+                                            <option value="Delivered" ${order.status === 'Delivered' ? 'selected' : ''}>Delivered</option>
+                                            <option value="Cancelled" ${order.status === 'Cancelled' ? 'selected' : ''}>Cancelled</option>
+                                        </select>
+                                    </td>
+                                    <td>${formatDate(order.orderDate)}</td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="btn-action btn-view" onclick="viewOrder('${order.id}')" title="View Details">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <button class="btn-action btn-delete" onclick="deleteOrder('${order.id}')" title="Delete Order">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+
+            container.innerHTML = tableHTML;
+        }
+
+        // Render empty state
+        function renderEmptyState() {
+            const container = document.getElementById('tableContainer');
+            document.getElementById('ordersCount').textContent = '0 Orders';
+
+            container.innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-inbox"></i>
+                    <h3>No Orders Found</h3>
+                    <p>There are no orders matching your criteria.</p>
+                </div>
+            `;
+        }
+
+        // Format date
+        function formatDate(dateString) {
+            if (!dateString) return 'N/A';
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        // Update order status
+        window.updateOrderStatus = async function(orderId, newStatus) {
+            try {
+                const orderRef = ref(database, `orders/${orderId}`);
+                await update(orderRef, {
+                    status: newStatus,
+                    lastUpdated: new Date().toISOString()
+                });
+
+                showNotification('Order status updated successfully!', 'success');
+            } catch (error) {
+                console.error('Error updating status:', error);
+                showNotification('Failed to update order status', 'error');
+            }
+        }
+
+        // View order details
+        window.viewOrder = function(orderId) {
+            const order = allOrders.find(o => o.id === orderId);
+            if (!order) return;
+
+            const modalBody = document.getElementById('modalBody');
+            modalBody.innerHTML = `
+                <div class="detail-group">
+                    <div class="detail-label">Order Code</div>
+                    <div class="detail-value">${order.orderCode || 'N/A'}</div>
+                </div>
+
+                <div class="detail-group">
+                    <div class="detail-label">Customer Name</div>
+                    <div class="detail-value">${order.personalInfo?.fullName || 'N/A'}</div>
+                </div>
+
+                <div class="detail-group">
+                    <div class="detail-label">Email</div>
+                    <div class="detail-value">${order.personalInfo?.email || 'N/A'}</div>
+                </div>
+
+                <div class="detail-group">
+                    <div class="detail-label">Phone</div>
+                    <div class="detail-value">${order.personalInfo?.phone || 'N/A'}</div>
+                </div>
+
+                <div class="detail-group">
+                    <div class="detail-label">Address</div>
+                    <div class="detail-value">
+                        ${order.personalInfo?.address || 'N/A'}<br>
+                        ${order.personalInfo?.city || ''}, ${order.personalInfo?.postalCode || ''}<br>
+                        ${order.personalInfo?.country || ''}
+                    </div>
+                </div>
+
+                <div class="detail-group">
+                    <div class="detail-label">Package</div>
+                    <div class="detail-value">${order.selectedPackage || 'N/A'}</div>
+                </div>
+
+                <div class="detail-group">
+                    <div class="detail-label">Balance</div>
+                    <div class="detail-value">€${order.cardInfo?.balance || '0.00'}</div>
+                </div>
+
+                <div class="detail-group">
+                    <div class="detail-label">Pricing</div>
+                    <div class="detail-value">
+                        Card Price: €${order.pricing?.cardPrice || '0.00'}<br>
+                        ${order.pricing?.deliveryPrice ? `Delivery: €${order.pricing.deliveryPrice}<br>` : ''}
+                        <strong>Total: €${order.pricing?.totalPrice || '0.00'}</strong>
+                    </div>
+                </div>
+
+                <div class="detail-group">
+                    <div class="detail-label">Payment Method</div>
+                    <div class="detail-value">${order.paymentMethod || order.selectedPaymentMethod || 'N/A'}</div>
+                </div>
+
+                <div class="detail-group">
+                    <div class="detail-label">Status</div>
+                    <div class="detail-value">
+                        <span class="status-badge status-${(order.status || 'pending').toLowerCase()}">${order.status || 'Pending'}</span>
+                    </div>
+                </div>
+
+                <div class="detail-group">
+                    <div class="detail-label">Order Date</div>
+                    <div class="detail-value">${formatDate(order.orderDate)}</div>
+                </div>
+
+                ${order.deliveryInfo ? `
+                <div class="detail-group">
+                    <div class="detail-label">Delivery Notes</div>
+                    <div class="detail-value">${order.deliveryInfo.notes || 'N/A'}</div>
+                </div>
+                ` : ''}
+            `;
+
+            document.getElementById('orderModal').classList.add('active');
+        }
+
+        // Close modal
+        window.closeModal = function() {
+            document.getElementById('orderModal').classList.remove('active');
+        }
+
+        // Delete order
+        window.deleteOrder = async function(orderId) {
+            if (!confirm('Are you sure you want to delete this order? This action cannot be undone.')) {
+                return;
+            }
+
+            try {
+                const orderRef = ref(database, `orders/${orderId}`);
+                await remove(orderRef);
+                showNotification('Order deleted successfully!', 'success');
+            } catch (error) {
+                console.error('Error deleting order:', error);
+                showNotification('Failed to delete order', 'error');
+            }
+        }
+
+        // Apply filters
+        window.applyFilters = function() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const statusFilter = document.getElementById('statusFilter').value;
+            const packageFilter = document.getElementById('packageFilter').value;
+
+            filteredOrders = allOrders.filter(order => {
+                // Search filter
+                const matchesSearch = !searchTerm ||
+                    (order.orderCode && order.orderCode.toLowerCase().includes(searchTerm)) ||
+                    (order.personalInfo?.email && order.personalInfo.email.toLowerCase().includes(searchTerm)) ||
+                    (order.personalInfo?.fullName && order.personalInfo.fullName.toLowerCase().includes(searchTerm));
+
+                // Status filter
+                const matchesStatus = !statusFilter || order.status === statusFilter;
+
+                // Package filter
+                const matchesPackage = !packageFilter || order.selectedPackage === packageFilter;
+
+                return matchesSearch && matchesStatus && matchesPackage;
+            });
+
+            renderOrdersTable();
+        }
+
+        // Reset filters
+        window.resetFilters = function() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('statusFilter').value = '';
+            document.getElementById('packageFilter').value = '';
+            filteredOrders = [...allOrders];
+            renderOrdersTable();
+        }
+
+        // Refresh data
+        window.refreshData = function() {
+            showNotification('Refreshing data...', 'info');
+            loadOrders();
+        }
+
+        // Show notification
+        function showNotification(message, type = 'info') {
+            // Simple notification system
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${type === 'success' ? '#4caf50' : type === 'error' ? '#f44336' : '#2196f3'};
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+                z-index: 10000;
+                animation: slideIn 0.3s ease-out;
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('orderModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // Search on input
+        document.getElementById('searchInput').addEventListener('input', function() {
+            applyFilters();
+        });
+
+        // Initialize
+        loadOrders();
+    </script>
+</body>
+</html>
