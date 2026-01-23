@@ -238,7 +238,8 @@ async function confirmOrder() {
             paymentMethod: formData.paymentMethod,
             orderDetails: formData.orderDetails,
             orderDate: new Date().toISOString(),
-            status: 'Pending'
+            status: 'Pending',
+            orderStatus: 'Waiting to Pay Delivery' // New 4-tier status system
         };
 
         // Save to Firebase
