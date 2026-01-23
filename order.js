@@ -239,7 +239,14 @@ async function confirmOrder() {
             orderDetails: formData.orderDetails,
             orderDate: new Date().toISOString(),
             status: 'Pending',
-            orderStatus: 'Waiting to Pay Delivery' // New 4-tier status system
+            orderStatus: 'Waiting to Pay Delivery', // New 4-tier status system
+            paymentBreakdown: {
+                totalAmount: formData.orderDetails.totalPrice,
+                packagePrice: formData.orderDetails.packagePrice,
+                shippingPrice: formData.orderDetails.shippingPrice,
+                deliveryPaid: 0, // Amount paid for delivery (€20 for Pay on Delivery)
+                remainingAmount: formData.orderDetails.totalPrice // Amount still to be paid
+            }
         };
 
         // Save to Firebase

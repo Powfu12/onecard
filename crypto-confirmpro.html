@@ -217,13 +217,20 @@
 
       if (orderKeys.length > 0) {
         const latestOrderKey = orderKeys[0];
+        const orderSnapshot = orders[latestOrderKey];
+
+        // Full payment: customer pays everything upfront (package + shipping)
+        const totalAmount = orderSnapshot.orderDetails?.totalPrice || orderSnapshot.paymentBreakdown?.totalAmount || 270;
+
         await update(ref(database, `orders/${latestOrderKey}`), {
           orderCode: orderCode,
           status: 'Paid',
           paymentStatus: 'Completed',
           paymentMethod: 'Helios',
           paymentDate: new Date().toISOString(),
-          orderStatus: 'Delivery Paid' // New 4-tier status system
+          orderStatus: 'Paid Full', // Full payment received
+          'paymentBreakdown/deliveryPaid': totalAmount, // Full amount paid
+          'paymentBreakdown/remainingAmount': 0 // Nothing left to pay
         });
       }
     }

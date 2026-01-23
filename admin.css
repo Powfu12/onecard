@@ -495,6 +495,80 @@ body {
 }
 
 /* ==========================================
+   Payment Breakdown
+   ========================================== */
+
+.payment-breakdown-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-xs) 0;
+    font-size: 14px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.payment-breakdown-row:last-of-type {
+    border-bottom: none;
+}
+
+.payment-label {
+    color: var(--gray-lighter);
+    font-weight: 500;
+}
+
+.payment-value {
+    color: var(--white);
+    font-family: var(--font-primary);
+    font-weight: 600;
+    font-size: 15px;
+}
+
+.payment-paid {
+    color: #4caf50;
+}
+
+.payment-remaining {
+    color: #ff9800;
+}
+
+.payment-complete {
+    color: var(--gold);
+}
+
+.payment-highlight-paid {
+    background: rgba(76, 175, 80, 0.1);
+    padding: var(--spacing-xs);
+    border-radius: var(--radius-sm);
+    margin: var(--spacing-xs) 0;
+    border-left: 3px solid #4caf50;
+}
+
+.payment-highlight-remaining {
+    background: rgba(255, 152, 0, 0.1);
+    padding: var(--spacing-xs);
+    border-radius: var(--radius-sm);
+    margin: var(--spacing-xs) 0;
+    border-left: 3px solid #ff9800;
+}
+
+.payment-note {
+    font-size: 12px;
+    color: var(--gray-lighter);
+    font-style: italic;
+    margin-top: var(--spacing-xs);
+    padding: var(--spacing-xs);
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: var(--radius-sm);
+    border-left: 2px solid var(--gold);
+}
+
+.payment-note.payment-complete {
+    color: var(--gold);
+    border-left-color: #4caf50;
+    background: rgba(76, 175, 80, 0.05);
+}
+
+/* ==========================================
    Copy Buttons
    ========================================== */
 

@@ -302,6 +302,14 @@ function createOrderCard(order) {
                 </div>
             </div>
 
+            <!-- Payment Breakdown -->
+            <div class="info-section">
+                <div class="info-label">Payment Breakdown</div>
+                <div class="info-content">
+                    ${getPaymentBreakdownHTML(order)}
+                </div>
+            </div>
+
             <!-- Status Management -->
             <div class="info-section">
                 <div class="info-label">Order Status</div>
@@ -345,6 +353,35 @@ ${si.country || ''}
 Phone: ${order.personalInfo?.phone || 'N/A'}`;
 }
 
+// Get Payment Breakdown HTML
+function getPaymentBreakdownHTML(order) {
+    const breakdown = order.paymentBreakdown || {};
+    const totalAmount = breakdown.totalAmount || order.orderDetails?.totalPrice || 0;
+    const deliveryPaid = breakdown.deliveryPaid || 0;
+    const remainingAmount = breakdown.remainingAmount !== undefined ? breakdown.remainingAmount : totalAmount;
+
+    // Determine styling based on payment status
+    const isPaidFull = remainingAmount === 0;
+    const hasPartialPayment = deliveryPaid > 0 && remainingAmount > 0;
+
+    return `
+        <div class="payment-breakdown-row">
+            <span class="payment-label">Total Amount:</span>
+            <span class="payment-value">€${totalAmount.toFixed(2)}</span>
+        </div>
+        <div class="payment-breakdown-row ${deliveryPaid > 0 ? 'payment-highlight-paid' : ''}">
+            <span class="payment-label">💰 Paid:</span>
+            <span class="payment-value payment-paid">€${deliveryPaid.toFixed(2)}</span>
+        </div>
+        <div class="payment-breakdown-row ${remainingAmount > 0 ? 'payment-highlight-remaining' : ''}">
+            <span class="payment-label">${remainingAmount > 0 ? '⚠️' : '✅'} Remaining:</span>
+            <span class="payment-value ${remainingAmount > 0 ? 'payment-remaining' : 'payment-complete'}">€${remainingAmount.toFixed(2)}</span>
+        </div>
+        ${hasPartialPayment ? `<div class="payment-note">💡 Delivery paid (€20). Collect €${remainingAmount.toFixed(2)} on delivery.</div>` : ''}
+        ${isPaidFull ? `<div class="payment-note payment-complete">✓ Fully paid</div>` : ''}
+    `;
+}
+
 // Update Order Status
 async function updateOrderStatus(firebaseKey, newStatus) {
     try {
@@ -383,12 +420,12 @@ function updateStatistics() {
 
     allOrders.forEach(order => {
         const status = getOrderStatus(order);
-        const price = order.orderDetails?.totalPrice || order.totalPrice || 0;
 
-        // Revenue only from Delivery Paid and Paid Full
-        if (status === 'Delivery Paid' || status === 'Paid Full') {
-            revenue += price;
-        }
+        // Revenue = amount already paid (deliveryPaid field)
+        // For Pay on Delivery: only €20 (delivery fee) counts as revenue initially
+        // For full payment: the full amount counts as revenue
+        const deliveryPaid = order.paymentBreakdown?.deliveryPaid || 0;
+        revenue += deliveryPaid;
 
         // Count pending
         if (status === 'Waiting to Pay Delivery') {

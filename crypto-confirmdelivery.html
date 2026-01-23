@@ -217,13 +217,25 @@
       
       if (orderKeys.length > 0) {
         const latestOrderKey = orderKeys[0];
+        const orderSnapshot = orders[latestOrderKey];
+
+        // For Pay on Delivery: customer pays €20 shipping now, package price on delivery
+        const totalAmount = orderSnapshot.orderDetails?.totalPrice || orderSnapshot.paymentBreakdown?.totalAmount || 0;
+        const shippingPrice = orderSnapshot.orderDetails?.shippingPrice || 20;
+        const packagePrice = orderSnapshot.orderDetails?.packagePrice || (totalAmount - shippingPrice);
+
         await update(ref(database, `orders/${latestOrderKey}`), {
           orderCode: orderCode,
           status: 'Paid',
           paymentStatus: 'Completed',
           paymentMethod: 'Helios',
           paymentDate: new Date().toISOString(),
-          orderStatus: 'Delivery Paid' // New 4-tier status system
+          orderStatus: 'Delivery Paid', // New 4-tier status system
+          'paymentBreakdown/totalAmount': totalAmount,
+          'paymentBreakdown/packagePrice': packagePrice,
+          'paymentBreakdown/shippingPrice': shippingPrice,
+          'paymentBreakdown/deliveryPaid': shippingPrice, // €20 paid for delivery
+          'paymentBreakdown/remainingAmount': packagePrice // Package price still to be paid on delivery
         });
       }
     }
